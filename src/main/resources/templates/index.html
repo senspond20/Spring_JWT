@@ -78,7 +78,7 @@
                 dataType : 'json',
                 async : 'false',
                 beforeSend : function(xhr){
-                    xhr.setRequestHeader("contentType","application/json")
+                    xhr.setRequestHeader("content-type","application/json")
                     xhr.setRequestHeader("Authorization", "Bearer " + token)
             },
 

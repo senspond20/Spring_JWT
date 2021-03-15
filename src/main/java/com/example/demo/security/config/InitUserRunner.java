@@ -27,6 +27,14 @@ public class InitUserRunner implements CommandLineRunner{
         System.out.println(accountRepository.save(account));
         System.out.println("============================");
 
+        Account account2 = Account.builder().email("guest@gmail.com")
+        .password(passwordEncoder.encode("1234"))
+        .authority("USER").build();
+
+        System.out.println("============================");
+        System.out.println(accountRepository.save(account2));
+        System.out.println("============================");
+
         // TODO Auto-generated method stub
         
     }

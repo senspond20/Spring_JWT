@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import lombok.Builder;
@@ -33,11 +34,12 @@ public class Account {
     @Column(name ="PASSWORD", length = 120, nullable = false)
     private String password;
 
+    @ColumnDefault("'USER'")
+    @Column(name ="ROLE", length = 15, nullable = false)
     private String authority;
 
     @Builder
     public Account(String email, String password, String authority) {
-
         this.email = email;
         this.password = password;
         this.authority = authority;
