@@ -7,6 +7,7 @@ import com.example.demo.security.service.AccountService;
 import com.example.demo.security.service.JwtTokenProviderSerivce;
 import com.example.demo.security.service.dto.AccountSaveRequestDto;
 import com.example.demo.security.service.dto.AuthRequestDto;
+import com.example.demo.security.service.dto.AuthReseponseDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,10 +15,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.RequiredArgsConstructor;
 
 @RestController
 public class AccountController {
@@ -45,9 +44,8 @@ public class AccountController {
         return accountService.saveAccount(accountSaveRequestDto);
     }
 
-
     @PostMapping("/authenticate")
-    public String generateToken(@RequestBody AuthRequestDto authRequest) throws Exception {
+    public AuthReseponseDto generateToken(@RequestBody AuthRequestDto authRequest) throws Exception {
         try {
         authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
@@ -55,7 +53,8 @@ public class AccountController {
         } catch (Exception ex) {
         throw new Exception("inavalid username/password");
         }
-         return jwtTokenProviderSerivce.generateToken(authRequest.getEmail());
+
+        return new AuthReseponseDto(authRequest.getEmail(),jwtTokenProviderSerivce.generateToken(authRequest.getEmail()));
     }
 
 
