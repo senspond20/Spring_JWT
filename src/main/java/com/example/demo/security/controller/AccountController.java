@@ -10,8 +10,10 @@ import com.example.demo.security.service.dto.AuthRequestDto;
 import com.example.demo.security.service.dto.AuthReseponseDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,41 +26,26 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @Autowired
-    private JwtTokenProviderSerivce jwtTokenProviderSerivce;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @GetMapping("/")
-    public String welcome() {
-      return "안녕하세요 !!";
-    }
+    // @GetMapping("/")
+    // public String welcome() {
+    //   return "안녕하세요 !!";
+    // }
     
     @GetMapping("/account/all")
     public List<Account> getAccountAll(){
         return accountService.getAccountAll();
     }
-    @PostMapping("/account/save")
-    public Account insertAccount(@RequestBody AccountSaveRequestDto accountSaveRequestDto){
-        return accountService.saveAccount(accountSaveRequestDto);
-    }
 
-    @PostMapping("/authenticate")
-    public AuthReseponseDto generateToken(@RequestBody AuthRequestDto authRequest) throws Exception {
+    @PostMapping("/signup")
+    public ResponseEntity<?> insertAccount(@RequestBody AccountSaveRequestDto accountSaveRequestDto){
+        Account account = null;
         try {
-        authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
-        );
-        } catch (Exception ex) {
-        throw new Exception("inavalid username/password");
+            account = accountService.saveAccount(accountSaveRequestDto);
+            return ResponseEntity.ok().body(account);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("msg : 이미 존재하는 이메일입니다. : " + accountSaveRequestDto.getEmail());
         }
-
-        return new AuthReseponseDto(authRequest.getEmail(),jwtTokenProviderSerivce.generateToken(authRequest.getEmail()));
     }
-
-
-
-    
 
 }

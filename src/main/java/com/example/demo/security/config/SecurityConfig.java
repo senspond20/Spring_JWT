@@ -24,7 +24,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         "/swagger-resources/**",
         "/swagger-ui.html",
         "/v2/api-docs",
-        "/webjars/**"
+        "/webjars/**",
+        "/h2-console/**"
     };
 
     @Autowired
@@ -43,12 +44,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-        .antMatchers("/authenticate").permitAll()
+        .antMatchers("/").permitAll()
+        .antMatchers("/signup").permitAll()            // 회원가입
+        .antMatchers("/authenticate").permitAll()      // 로그인-> 토큰발급
         .anyRequest().authenticated()
         .and().exceptionHandling().and().sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);;
-        
         //  super.configure(http);
     }
 
