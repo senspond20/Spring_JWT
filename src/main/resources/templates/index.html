@@ -15,6 +15,7 @@
         <input type ="password" name="password" />
         <button onclick="login();">로그인</button>
         <button onclick="signUp();">회원 가입</button>
+        <button onclick="getList();">리스트</button>
     </div>
     <hr />
     <div id ="token">
@@ -67,6 +68,26 @@
                 $('#token div').html(error.responseText);
             })
         };
+
+        function getList(){
+            var token = $('#token div').html();
+            console.log(token);
+            $.ajax({
+                url : '/account/all',
+                method : 'get',
+                dataType : 'json',
+                async : 'false',
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader("contentType","application/json")
+                    xhr.setRequestHeader("Authorization", "Bearer " + token)
+            },
+
+            }).then(function(data){
+                console.log(data)
+            }).fail(function(error){
+                console.log(error);
+            })
+        }
 
     </script>
 </body>
