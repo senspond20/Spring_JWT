@@ -31,13 +31,13 @@ public class AuthenticateController {
 
         authenticate(authRequest.getEmail(), authRequest.getPassword());
         UserDetails userDetails = null;
+        String token = null;
         try {
             userDetails = userDetailsService.loadUserByUsername(authRequest.getEmail());   
+            token = jwtTokenProviderSerivce.generateToken(userDetails); 
         } catch (Exception ex) {
             throw new Exception("inavalid username/password");
         }
-            String token = jwtTokenProviderSerivce.generateToken(authRequest.getEmail());    
-            
         Map<String,Object> map = new HashMap<>();
         map.put("userDetail", userDetails);
         map.put("token", token);

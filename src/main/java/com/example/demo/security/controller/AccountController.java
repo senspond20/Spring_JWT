@@ -35,7 +35,7 @@ public class AccountController {
     // }
     
     // @Secured("ROLE_ADMIN")
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/account/all")
     public List<Account> getAccountAll(){
         return accountService.getAccountAll();
