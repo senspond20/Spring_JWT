@@ -15,7 +15,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class JwtTokenProviderSerivce {
  
-    private final String SECRET_KEY = "javatechie";
+    private final String SECRET_KEY = "senspond";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
