@@ -27,6 +27,7 @@ public class JwtTokenProviderSerivce {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
+    // private -> public 
     public Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
