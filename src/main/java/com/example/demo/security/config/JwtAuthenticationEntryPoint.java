@@ -1,4 +1,4 @@
-package com.example.demo.security.controller;
+package com.example.demo.security.config;
 
 import java.io.IOException;
 import java.io.Serializable;

@@ -11,21 +11,18 @@ import lombok.NoArgsConstructor;
 public class AccountSaveRequestDto {
     private String email;
     private String password;
-    private String authority = "USER"; // default
 
     @Builder
-    public AccountSaveRequestDto(String email, String password, String authority){
+    public AccountSaveRequestDto(String email, String password){
         super();
         this.email = email;
         this.password = password;
-        this.authority = authority;
     }
 
     public Account toEntity(String bcryptPassword){
         return Account.builder()
                       .email(email)
                       .password(bcryptPassword)
-                      .authority(authority)
                       .build();
     }
 

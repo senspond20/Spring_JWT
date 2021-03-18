@@ -45,14 +45,12 @@
                 console.log(error);
             })
         };
-
         function signUp(){
             var joinData = {
               email :$('input[name=email]').val(),
               password :$('input[name=password]').val()
             };
             $('#token div').html('');
-            console.log(joinData);
             $.ajax({
                 url : '/signup',
                 method : 'post',
