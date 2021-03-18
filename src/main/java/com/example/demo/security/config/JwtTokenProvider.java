@@ -64,7 +64,6 @@ public class JwtTokenProvider implements Serializable {
                                                             .collect(Collectors.joining(","));
 
         claims.put(AUTHORITIES_KEY, authorities);
-
         return createToken(claims, authentication.getName());
     }
 

@@ -1,8 +1,5 @@
 package com.example.demo.security.config;
 
-import com.example.demo.security.service.AccountService;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -68,11 +65,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors()
             .and()
             .csrf().disable().authorizeRequests()
-            .antMatchers("/").permitAll()
-            .antMatchers("/signup").permitAll()            // 회원가입
-            .antMatchers("/authenticate").permitAll()      // 로그인-> 토큰발급
-            .antMatchers("/admin/**").hasRole("ADMIN")     // admin/** 에 대해서는 ADMIN 권한 */
-            .anyRequest().authenticated()
+            .antMatchers("/","/signup","/authenticate").permitAll() // 홈, 회원가입, 로그인 검증 url에 접근허용
+            .anyRequest().authenticated()                           // 을 제외한 모든 요청에 인증 요구
             .and()
             .exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
