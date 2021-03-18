@@ -43,6 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String authToken = null;
         String userName = null;
+        
         if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
             authToken = authorizationHeader.replace(TOKEN_PREFIX,"");
            

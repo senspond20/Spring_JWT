@@ -1,38 +1,56 @@
 package com.example.demo.jwt;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.example.demo.security.config.JwtTokenProvider;
+import com.google.common.base.Function;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 public class JwtTokenTest {
-    
-    private JwtTokenProvider jwtTokenProvider;
 
-    @BeforeEach
-    public void Before(){
-        jwtTokenProvider = new JwtTokenProvider();
+    private final int TOKEN_VALIDITY = 18000;
+    private final String SIGNING_KEY = "senspond";
+    private String token = null;
+
+    private String createToken(Map<String, Object> claims, String subject) {
+        return Jwts.builder()
+                   .setClaims(claims)
+                   .setSubject(subject)
+                   .setIssuedAt(new Date(System.currentTimeMillis()))
+                   .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY * 1000))
+                   .signWith(SignatureAlgorithm.HS256, SIGNING_KEY).compact();
     }
 
+    private <T> T extractClaim(Claims claims, Function<Claims, T> claimsResolver) {
+        return claimsResolver.apply(claims);
+    }
+
+    
     @Test
-    public void test_1(){
-        String token = jwtTokenProvider.generateToken("senspond");
+    public void test(){
+        System.out.println("============ Get Token ==========");
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("roles", "admin");
+        this.token = createToken(claims,"senspond");
         System.out.println(token);
     }
 
-    @Test
-    public void test_2(){
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZW5zcG9uZCIsImV4cCI6MTYxNTg5MTkwNywiaWF0IjoxNjE1ODU1OTA3fQ.Kp8V8ygmRiAw_saxS6uXnys0rB_RTXmxaJotpVLCPE8";
+    @AfterEach
+    public void after(){
+        System.out.println("============ From Token ==========");
+        Claims claims = Jwts.parser().setSigningKey(SIGNING_KEY).parseClaimsJws(token).getBody();
+        
+        String userName = extractClaim(claims, Claims::getSubject );
+        Date date = extractClaim(claims, Claims::getExpiration );
 
-        Claims clamis = jwtTokenProvider.extractAllClaims(token);
-        String userName = jwtTokenProvider.extractUsername(token);
-        Date date = jwtTokenProvider.extractExpiration(token);
-
-        System.out.println(clamis);
+        System.out.println(claims);
         System.out.println(userName);
         System.out.println(date);
     }
